@@ -12,6 +12,9 @@ repositories {
 }
 
 dependencies {
+    implementation("org.junit.jupiter:junit-jupiter:5.7.0")
+    testImplementation(kotlin("test"))
+    implementation("org.hamcrest:hamcrest-all:1.3")
     testImplementation(kotlin("test"))
 }
 
