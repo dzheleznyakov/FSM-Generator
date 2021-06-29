@@ -1,0 +1,27 @@
+package zh.fsm.smc.parser
+
+interface Builder {
+    fun newHeaderWithName()
+    fun addHeaderWithValue()
+    fun setStateName()
+    fun done()
+    fun setSuperStateName()
+    fun setEvent()
+    fun setNullEvent()
+    fun setEntryAction()
+    fun setExitAction()
+    fun setStateBase()
+    fun setNextState()
+    fun setName(name: String)
+    fun transitionWithAction()
+    fun transitionWithNullAction()
+    fun syntaxError(line: Int, pos: Int)
+    fun transitionWithActions()
+    fun setNullNextState()
+    fun addAction()
+    fun headerError(state: ParserState, event: ParserEvent, line: Int, pos: Int)
+    fun stateStecError(state: ParserState, event: ParserEvent, line: Int, pos: Int)
+    fun transitionError(state: ParserState, event: ParserEvent, line: Int, pos: Int)
+    fun transitionGroupError(state: ParserState, event: ParserEvent, line: Int, pos: Int)
+    fun endError(state: ParserState, event: ParserEvent, line: Int, pos: Int)
+}
