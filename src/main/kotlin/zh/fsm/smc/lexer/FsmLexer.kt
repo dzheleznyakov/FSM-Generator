@@ -21,19 +21,17 @@ class FsmLexer(private val collector: TokenCollector) : Lexer {
     }
 
     private fun handleEvent(event: Char) {
-        val stateTransitions = transitions[state] ?: return
-        val transition = stateTransitions.stream()
+        (transitions[state] ?: return)
+            .stream()
             .filter { tr -> tr.eventTest(event) }
             .findAny()
-            .orElse(nullTransition)
-        performTransition(transition, event)
+            .orElse(errorTransition)
+            .run(event)
     }
 
-    private fun performTransition(transition: Transition, event: Char) {
-        with(transition) {
-            state = newState
-            action(event)
-        }
+    private fun Transition.run(event: Char) {
+        state = newState
+        action(event)
     }
 
     enum class State {
@@ -45,7 +43,7 @@ class FsmLexer(private val collector: TokenCollector) : Lexer {
         val newState: State,
         val action: (Char) -> Unit)
 
-    private val nullTransition = Transition({ true }, State.NEW_TOKEN) { ++linePos; collector.error(line, linePos) }
+    private val errorTransition = Transition({ true }, State.NEW_TOKEN) { ++linePos; collector.error(line, linePos) }
 
     private val transitions = mapOf(
         State.NEW_TOKEN to listOf(
