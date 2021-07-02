@@ -8,10 +8,12 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@DisplayName("Testing Lexer")
-internal class LexerTest : TokenCollector {
+internal abstract class BaseLexerTest : TokenCollector {
     private var tokens = ""
-    private val lexer = Lexer(this)
+    private val lexer = getLexer()
+
+    protected abstract fun getLexer(): Lexer
+
     private var firstToken = true
 
     private fun addToken(token: String) {
@@ -21,7 +23,7 @@ internal class LexerTest : TokenCollector {
         firstToken = false
     }
 
-    private fun assertLexResult(input: String, expected: String) {
+    protected fun assertLexResult(input: String, expected: String) {
         lexer.lex(input)
         assertThat(tokens, `is`(equalTo(expected)))
     }
@@ -131,6 +133,8 @@ internal class LexerTest : TokenCollector {
 
         @Test
         @DisplayName("Parse multiple lines")
-        internal fun multipleLines() = assertLexResult("FSM:fsm.\n{bob-.}", "#FSM#,C,#fsm#,E1/8,OB,#bob#,D,E2/6,CB")
+        internal fun multipleLines() {
+            assertLexResult("FSM:fsm.\n{bob-.}", "#FSM#,C,#fsm#,E1/8,OB,#bob#,D,E2/6,CB")
+        }
     }
 }
