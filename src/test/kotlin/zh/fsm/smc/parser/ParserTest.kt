@@ -8,12 +8,12 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import zh.fsm.smc.lexer.Lexer
+import zh.fsm.smc.lexer.SimpleLexer
 import zh.fsm.smc.parser.ParserEvent.*
 
 @DisplayName("Testing Parser")
 internal class ParserTest {
-    private lateinit var lexer: Lexer
+    private lateinit var lexer: SimpleLexer
     private lateinit var parser: Parser
     private lateinit var builder: SyntaxBuilder
 
@@ -21,7 +21,7 @@ internal class ParserTest {
     internal fun setUp() {
         builder = SyntaxBuilder()
         parser = Parser(builder)
-        lexer = Lexer(parser)
+        lexer = SimpleLexer(parser)
     }
 
     private fun assertParseResult(input: String, expected: String) {

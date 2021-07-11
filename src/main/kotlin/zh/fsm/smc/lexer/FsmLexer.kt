@@ -9,15 +9,17 @@ class FsmLexer(private val collector: TokenCollector) : Lexer {
     private lateinit var input: String
 
     override fun lex(input: String) {
+        init(input)
+        for (i in input.indices)
+            handleEvent(input[i]).also { ++totalPos }
+        handleEvent(0.toChar())
+    }
+
+    private fun init(input: String) {
         this.input = input
         line = 1
         linePos = 0
         totalPos = 0
-        for (i in input.indices) {
-            handleEvent(input[i])
-            ++totalPos
-        }
-        handleEvent(0.toChar())
     }
 
     private fun handleEvent(event: Char) {
