@@ -276,7 +276,9 @@ class SemanticAnalyzer {
         }
 
         private fun checkStateForPreviouslyDefinedTransition(state: SemanticState) =
-            state.transitions.forEach { st -> checkTransitionFoPreviousDefinition(state, st)}
+            state.transitions
+                .filter { st -> st.event != null }
+                .forEach { st -> checkTransitionFoPreviousDefinition(state, st)}
 
         private fun checkTransitionFoPreviousDefinition(state: SemanticState, st: SemanticTransition) {
             val thisTuple = TransitionTuple(state.name, st.event, st.nextState!!.name, st.actions)
