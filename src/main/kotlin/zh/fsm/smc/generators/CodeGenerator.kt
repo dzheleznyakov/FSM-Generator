@@ -8,7 +8,7 @@ import java.nio.file.FileSystems
 import java.nio.file.Path
 
 abstract class CodeGenerator(
-    protected val optimizedStateMachine: OptimizedStateMachine,
+    protected open val optimizedStateMachine: OptimizedStateMachine,
     protected val outputDirectory: String?,
     protected val flags: Map<String, String>
 ) {
