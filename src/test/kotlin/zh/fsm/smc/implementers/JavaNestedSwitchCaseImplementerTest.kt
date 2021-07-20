@@ -1,7 +1,8 @@
 package zh.fsm.smc.implementers
 
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.startsWith
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import zh.fsm.smc.OptimizedStateMachine
@@ -30,13 +31,6 @@ internal class JavaNestedSwitchCaseImplementerTest {
         val ast = analyzer.analyze(builder.getFsm())
         return optimizer.optimize(ast)
     }
-
-    private fun assertWhitespaceEquivalent(generated: String, expected: String) {
-        assertThat(generated.compressWhiteSpace(), equalTo(expected.compressWhiteSpace()))
-    }
-
-    fun String.compressWhiteSpace(): String =
-        replace("\\n+".toRegex(), "\n").replace("[\t ]+".toRegex(), " ").replace(" *\n *".toRegex(), "\n")
 
     @Test
     @DisplayName("Test generating class with one transition, actions and with package")
