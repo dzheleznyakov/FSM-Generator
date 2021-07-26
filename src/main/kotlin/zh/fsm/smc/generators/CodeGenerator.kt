@@ -17,9 +17,9 @@ abstract class CodeGenerator(
         else FileSystems.getDefault().getPath(outputDirectory, outputFileName)
 
     @Throws(IOException::class)
-    fun generate(): Unit {
+    fun generate() {
         val nscGenerator = NSCGenerator()
-        nscGenerator.generate(optimizedStateMachine)
+        nscGenerator.generate(optimizedStateMachine).accept(getImplementer())
         writeFiles();
     }
 
