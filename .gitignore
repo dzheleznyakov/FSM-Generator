@@ -1,4 +1,8 @@
 .idea
 .gradle
 build
+out
 .css
+**/*.iml
+
+test-cases/java_turnstile/TwoCoinTurnstile.java

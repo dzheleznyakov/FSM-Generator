@@ -1,7 +1,7 @@
 package zh.fsm.smc.generators.nestedSwitchCaseGenerator
 
 interface NSCNode {
-    fun accept(visitor: NSCNodeVisitor): Unit
+    fun accept(visitor: NSCNodeVisitor)
 
     class SwitchCaseNode(val variableName: String) : NSCNode {
         val caseNodes = arrayListOf<NSCNode>()

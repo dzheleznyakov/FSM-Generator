@@ -4,7 +4,7 @@ import zh.fsm.smc.generators.nestedSwitchCaseGenerator.NSCNode
 import zh.fsm.smc.generators.nestedSwitchCaseGenerator.NSCNodeVisitor
 
 class JavaNestedSwitchCaseImplementer(private val flags: Map<String, String>) : NSCNodeVisitor {
-    private val _output = StringBuilder()
+    private var _output = StringBuilder()
     val output: String
         get() = _output.toString()
 
@@ -12,20 +12,26 @@ class JavaNestedSwitchCaseImplementer(private val flags: Map<String, String>) : 
 
     override fun visit(switchCaseNode: NSCNode.SwitchCaseNode) {
         _output += "switch(${switchCaseNode.variableName}) {\n"
+        ++_output
         switchCaseNode.generateCases(this)
+        --_output
         _output += "}\n"
     }
 
     override fun visit(caseNode: NSCNode.CaseNode) {
         _output += "case ${caseNode.caseName}:\n"
+        ++_output;
         caseNode.caseActionNode.accept(this)
         _output += "break;\n"
+        --_output
     }
 
     override fun visit(functionCallNode: NSCNode.FunctionCallNode) {
         _output += "${functionCallNode.functionName}("
+        indentOff()
         functionCallNode.argument?.accept(this)
         _output += ");\n"
+        indentOn()
     }
 
     override fun visit(enumNode: NSCNode.EnumNode) {
@@ -35,8 +41,8 @@ class JavaNestedSwitchCaseImplementer(private val flags: Map<String, String>) : 
 
     override fun visit(statePropertyNode: NSCNode.StatePropertyNode) {
         with (statePropertyNode) {
-            _output +="private State state = State.$initialState;\n" +
-                    "private void setState(State s) {state = s;}\n"
+            _output += "private State state = State.$initialState;\n"
+            _output += "private void setState(State s) {state = s;}\n"
         }
     }
 
@@ -55,6 +61,7 @@ class JavaNestedSwitchCaseImplementer(private val flags: Map<String, String>) : 
         if (actionsName != "")
             _output += " implements $actionsName"
         _output += " {\n"
+        ++_output
 
         _output += "public abstract void unhandledTransition(String state, String event);\n"
         with(fsmClassNode) {
@@ -70,12 +77,15 @@ class JavaNestedSwitchCaseImplementer(private val flags: Map<String, String>) : 
             fsmClassNode.actions.forEach { action ->
                 _output += "protected abstract void $action();\n"
             }
+        --_output
         _output += "}\n"
     }
 
     override fun visit(handleEventNode: NSCNode.HandleEventNode) {
         _output += "private void handleEvent(Event event) {\n"
+        ++_output
         handleEventNode.switchCase.accept(this)
+        --_output
         _output += "}\n"
     }
 
